@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('./database/database'); // database.js 파일 불러오기
+const db = require('./database/database');
 const cors = require('cors');
 
 const app = express();
@@ -8,7 +8,6 @@ const PORT = 8000;
 app.use(cors());
 app.use(express.json());
 
-// 게시글 생성
 app.post('/posts', async (req, res) => {
   const { title, content, author } = req.body;
   const query = `
@@ -27,7 +26,6 @@ app.post('/posts', async (req, res) => {
   }
 });
 
-// 모든 게시글 조회
 app.get('/posts', async (req, res) => {
   try {
     const result = await db.query('SELECT * FROM notice_board');
@@ -38,7 +36,6 @@ app.get('/posts', async (req, res) => {
   }
 });
 
-// 특정 게시글 조회 (조회수 증가 없음)
 app.get('/posts/:id', async (req, res) => {
   const { id } = req.params;
   const query = `
@@ -58,7 +55,6 @@ app.get('/posts/:id', async (req, res) => {
   }
 });
 
-// 조회수 증가 엔드포인트
 app.post('/posts/:id/view', async (req, res) => {
   const { id } = req.params;
   const query = `
@@ -80,7 +76,6 @@ app.post('/posts/:id/view', async (req, res) => {
   }
 });
 
-// 특정 게시글 수정
 app.put('/posts/:id', async (req, res) => {
   const { id } = req.params;
   const { title, content, author } = req.body;
@@ -104,7 +99,6 @@ app.put('/posts/:id', async (req, res) => {
   }
 });
 
-// 특정 게시글 삭제
 app.delete('/posts/:id', async (req, res) => {
   const { id } = req.params;
   const query = 'DELETE FROM notice_board WHERE id = $1 RETURNING *';
@@ -121,5 +115,4 @@ app.delete('/posts/:id', async (req, res) => {
   }
 });
 
-// 서버 실행
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
